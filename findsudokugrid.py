@@ -25,7 +25,6 @@ def getGridContour(image):
 
 
 def getTopDownView(image, corners):
-    print(corners)
     def order_corners(corners):
         # Separate corners into individual points
         corners = [(corner[0][0], corner[0][1]) for corner in corners]
@@ -141,10 +140,13 @@ def getGridLines(image):
     #then return the image
     return image
 
-
+#return each corner location in a numpy array
 def findCellLocation(image, x, y):
+    #the step is a will help to find a location
     step_x = image.shape[1] // 9
     step_y = image.shape[0] // 9
 
-    top_r, top_l, bottom_r, bottom_l = [[x*step_x], [y*step_y], [x*step_x + step_x], [y*step_y + step_y]]
-    return (top_r, top_l, bottom_r, bottom_l)
+    top_r, top_l, bottom_r, bottom_l = [[[x*step_x + step_x, y*step_y]], [[x*step_x, y*step_y]], [[x*step_x + step_x, y*step_y + step_y]], [[x*step_x, y*step_y + step_y]]]
+
+    corners = np.array([top_l, bottom_l, bottom_r, top_r])
+    return corners
