@@ -1,13 +1,16 @@
 import cv2
 import numpy as np
 
+
+#Récupère les contours de l'image
 def getGridContour(image):
     #turn the image into gray scales
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     #blur the image
-    blur = cv2.medianBlur(gray, 3)
     #create a thresh : will turn the image in black or white values
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blur = cv2.medianBlur(gray, 3)
     thresh = cv2.adaptiveThreshold(blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV,11,3)
+    
 
     #find the contour of the grid in the image
     cnts = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -36,20 +39,17 @@ def getTopDownView(image, corners):
 
     # Determine width of new image which is the max distance between 
     # (bottom right and bottom left) or (top right and top left) x-coordinates
-    width_A = np.sqrt(((bottom_r[0] - bottom_l[0]) ** 2) + ((bottom_r[1] - bottom_l[1]) ** 2))
-    width_B = np.sqrt(((top_r[0] - top_l[0]) ** 2) + ((top_r[1] - top_l[1]) ** 2))
-    width = max(int(width_A), int(width_B))
+    width = max(int(np.sqrt(((bottom_r[0] - bottom_l[0]) ** 2) + ((bottom_r[1] - bottom_l[1]) ** 2))), 
+                int(np.sqrt(((top_r[0] - top_l[0]) ** 2) + ((top_r[1] - top_l[1]) ** 2))))
 
     # Determine height of new image which is the max distance between 
     # (top right and bottom right) or (top left and bottom left) y-coordinates
-    height_A = np.sqrt(((top_r[0] - bottom_r[0]) ** 2) + ((top_r[1] - bottom_r[1]) ** 2))
-    height_B = np.sqrt(((top_l[0] - bottom_l[0]) ** 2) + ((top_l[1] - bottom_l[1]) ** 2))
-    height = max(int(height_A), int(height_B))
+    height = max(int(np.sqrt(((top_r[0] - bottom_r[0]) ** 2) + ((top_r[1] - bottom_r[1]) ** 2))), 
+                int(np.sqrt(((top_l[0] - bottom_l[0]) ** 2) + ((top_l[1] - bottom_l[1]) ** 2))))
 
     # Construct new points to obtain top-down view of image in 
     # top_r, top_l, bottom_l, bottom_r order
-    dimensions = np.array([[0, 0], [width - 1, 0], [width - 1, height - 1], 
-                    [0, height - 1]], dtype = "float32")
+    dimensions = np.array([[0, 0], [width - 1, 0], [width - 1, height - 1], [0, height - 1]], dtype = "float32")
 
     # Convert to Numpy format
     ordered_corners = np.array(ordered_corners, dtype="float32")

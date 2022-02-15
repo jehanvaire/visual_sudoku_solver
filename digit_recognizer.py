@@ -9,10 +9,6 @@ from keras.layers import *
 from keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
-#class ModelBuilder:
-
-
-
 #préparation des images
 def preProccess(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -110,65 +106,65 @@ def build():
     model.compile(Adam(lr=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
 
     batchSizeVal = 50
-    epochsVal = 5
+    epochsVal = 15
 
 
     model.fit(dataGenerator.flow(x_train, y_train, batch_size=batchSizeVal), 
                                 epochs=epochsVal, 
                                 validation_data=(x_validation, y_validation),
                                 shuffle=1)
-    
+
+
     model.save('model_train.h5')
     return model
 
-""" 
-def showResults(self):
+
+# def showResults(self):
 
 
-    #Affichage du nombre d'images de chaque classe
+#     #Affichage du nombre d'images de chaque classe
 
-    plt.figure(figsize=(10, 5))
-    plt.bar(range(0, nbClasses), numOfSamples)
-    plt.title("Number of images for each class")
-    plt.xlabel("Class ID")
-    plt.ylabel("Number of Images")
-    plt.show()
+#     plt.figure(figsize=(10, 5))
+#     plt.bar(range(0, nbClasses), numOfSamples)
+#     plt.title("Number of images for each class")
+#     plt.xlabel("Class ID")
+#     plt.ylabel("Number of Images")
+#     plt.show()
 
-    #Affichage d'une image
+#     #Affichage d'une image
 
-    img = preProcessing(x_train[50])
-    img = cv2.resize(img, (300, 300))
-    cv2.imshow("Preprocess", img)
-    cv2.waitKey(0)
-
-
-
+#     img = preProccess(x_train[50])
+#     img = cv2.resize(img, (300, 300))
+#     cv2.imshow("Preprocess", img)
+#     cv2.waitKey(0)
 
 
 
-    model = buildModel()
-    print(model.summary())
 
 
 
-    plt.figure(1)
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.legend(['training', 'validation'])
-    plt.title('Loss')
-    plt.xlabel('Epochs')
+#     model = buildModel()
+#     print(model.summary())
 
-    plt.figure(2)
-    plt.plot(history.history['accuracy'])
-    plt.plot(history.history['val_accuracy'])
-    plt.legend(['training', 'validation'])
-    plt.title('Accuracy')
-    plt.xlabel('Epochs')
 
-    #plt.show()
-    score = model.evaluate(x_test, y_test, verbose=0)
-    print("test score : ", score[0])
-    print("test accuracy : ", score[1])
 
-    model.save("model_train.h5")
-"""
+#     plt.figure(1)
+#     plt.plot(history.history['loss'])
+#     plt.plot(history.history['val_loss'])
+#     plt.legend(['training', 'validation'])
+#     plt.title('Loss')
+#     plt.xlabel('Epochs')
+
+#     plt.figure(2)
+#     plt.plot(history.history['accuracy'])
+#     plt.plot(history.history['val_accuracy'])
+#     plt.legend(['training', 'validation'])
+#     plt.title('Accuracy')
+#     plt.xlabel('Epochs')
+
+#     #plt.show()
+#     score = model.evaluate(x_test, y_test, verbose=0)
+#     print("test score : ", score[0])
+#     print("test accuracy : ", score[1])
+
+#     model.save("model_train.h5")

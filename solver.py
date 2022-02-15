@@ -7,8 +7,8 @@ import digit_recognizer
 M=9
 
 #will crop the image to 32*32, on its center
-def cropTo28(cell):
-    tailleImage = 32
+def cropImage(cell, taille):
+    tailleImage = taille
     diff_hauteur = cell.shape[0] - tailleImage
     diff_largeur = cell.shape[1] - tailleImage
     crop = cell[int(diff_hauteur/2):tailleImage+int(diff_hauteur/2), int(diff_largeur/2):tailleImage+int(diff_largeur/2)]
@@ -17,18 +17,26 @@ def cropTo28(cell):
 #will check if the image has a number 
 def hasNumber(cell):
 
-    cell = cell[:,:,0]
+    #cell = cell[:,:,0]
     cell = np.array(cell)
-    cell = np.invert(cell)
+
+    cell = cropImage(cell, 46)
+
+    # cell = np.invert(cell)
+
+    # cv2.imshow("cell", cell)
+    # cv2.waitKey(0)
 
     x, y = cell.shape
     hasNombre = False
     for i in range(x):
         for j in range(y):
             p = cell[i, j]
-            if(p > 150):
+            print(p, end=' ')
+            if(p == 0):
                 #p a un nombre
                 hasNombre = True
+        print()
     return hasNombre
 
 def createList(transformed, model):
@@ -49,14 +57,13 @@ def createList(transformed, model):
             else:
                 cell = np.asarray(cell)
                 cell = cv2.resize(cell, (32, 32))
-                cell = digit_recognizer.preProccess(cell)
+                # cell = digit_recognizer.preProccess(cell)
                 cell = cell.reshape(1, 32, 32, 1)
                 prediction = model.predict(cell)[0]
                 nombre = np.argmax(prediction)
 
             tab.append(nombre)
         grille.append(tab)
-
     return grille
 
 

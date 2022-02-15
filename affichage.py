@@ -1,5 +1,6 @@
 import cv2
 
+#Affichage des nombres sur l'image finale
 def affichagenombres(image, grille):
     #the step is a will help to find a location
     step_x = image.shape[1] // 9
